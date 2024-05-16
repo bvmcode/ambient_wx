@@ -34,12 +34,12 @@ class LogRetry(Retry):
 class ApiRequestHandler:
     retry_status_codes = [429, 500, 502, 503, 504]
     backoff_factor = 0.1
-    retry_total = 5
 
-    def __init__(self, root_url):
+    def __init__(self, root_url, **kwargs):
         if root_url.endswith("/"):
             root_url = root_url[:-1]
         self.root_url = root_url
+        self.retry_total = kwargs.get("retry_total", 5)
 
     def __repr__(self):
         return f"ApiRequestHandler({self.root_url})"
@@ -59,25 +59,37 @@ class ApiRequestHandler:
         else:
             self.url = self.root_url
 
+    def __message_handling(self, msg):
+        logging.error(msg)
+        raise SystemExit(msg)
+
     def get(self, endpoint=None, params=None):
         self.__get_session_with_retries()
         self.__build_url(endpoint)
+        error_message = None
         try:
             logging.info(f"GET request: {self.url}")
             response = self.__session.get(self.url, params=params, verify=True)
+            response.raise_for_status()
+        except requests.exceptions.RetryError:
+            error_message = "API GET request retries exhausted"
+        except requests.exceptions.Timeout as e:
+            error_message = f"API GET request timed out {e.response.status_code}"
+        except requests.exceptions.ConnectionError as e:
+            error_message = f"API GET connection error {e.response.status_code}"
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 401:
-                message = (
+                error_message = (
                     f"401 Unauthorized GET request {self.url} - "
                     "Check API Key and Application Key"
                 )
             else:
-                message = f"API Error: {e.response.reason} ({e.response.status_code})"
-            logging.error(message)
-            raise e
-        except requests.exceptions.RetryError as e:
-            message = "Retries exhausted"
-            logging.error("API GET request retries exhausted")
-            raise e
+                error_message = f"API Error {e.response.status_code}"
+        except requests.exceptions.RequestException as e:
+            error_message = f"Request error {e.response.status_code}"
+        finally:
+            if error_message is not None:
+                self.__message_handling(error_message)
+
         self.__session.close()
         return response

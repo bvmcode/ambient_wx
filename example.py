@@ -6,7 +6,7 @@ from dotenv import dotenv_values
 from ambient_wx import AmbientApi, WxDeviceCollection, WxObservationCollection, WxDevice
 
 # add logging
-logging.basicConfig(filename='app.log', filemode='w', format='%(levelname)s: %(asctime)s - %(message)s', level=logging.INFO)
+logging.basicConfig(filename='app.log', filemode='w', format='%(levelname)s: %(asctime)s - %(message)s', level=logging.DEBUG)
 
 
 creds = dict(dotenv_values(".env"))

@@ -116,8 +116,8 @@ class WxDevice:
 
 
 class WxDeviceCollection(ApiRequestHandler):
-    def __init__(self, ambient_api):
-        super().__init__(ambient_api.api_url)
+    def __init__(self, ambient_api, **kwargs):
+        super().__init__(ambient_api.api_url, **kwargs)
         self.ambient_api = ambient_api
 
     def __repr__(self):
@@ -155,8 +155,8 @@ class WxDeviceCollection(ApiRequestHandler):
 
 
 class WxObservationCollection(ApiRequestHandler):
-    def __init__(self, ambient_api, device=None, mac_addr=None):
-        super().__init__(ambient_api.api_url)
+    def __init__(self, ambient_api, device=None, mac_addr=None, **kwargs):
+        super().__init__(ambient_api.api_url, **kwargs)
         self.ambient_api = ambient_api
         if device is not None:
             self.device = device

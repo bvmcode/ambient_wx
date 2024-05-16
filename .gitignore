@@ -1,3 +1,6 @@
+test_rebuild_run.sh
+run_tests_and_lint.sh
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
