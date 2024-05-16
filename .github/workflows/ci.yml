@@ -32,16 +32,13 @@ jobs:
         run: poetry install --no-interaction
       - name: Tests
         run: |
-            poetry shell
+            source .venv/bin/activate
             pytest ./src/ambient_wx -v
-            exit
-      - name: Linting
-        run: |
-            poetry shell
-            pflake8 ./src/ambient_wx
-            exit
       - name: Imports
         run: |
-            poetry shell
+            source .venv/bin/activate
             isort ./src/ambient_wx -c --diff
-            exit
+      - name: Linting
+        run: |
+            source .venv/bin/activate
+            pflake8 ./src/ambient_wx
