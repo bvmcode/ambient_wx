@@ -40,6 +40,7 @@ pyproject-flake8 = "7.0.0"
 pytest = "8.2.0"
 pytest-sugar = "1.0.0"
 responses = "0.25.0"
+coverage = "^7.5.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -57,3 +58,10 @@ skip-string-normalization = true
 [tool.flake8]
 max-line-length = 100
 per-file-ignores = "__init__.py:F401"
+
+[tool.coverage.run]
+omit = [".*", "*/site-packages/*"]
+
+[tool.coverage.report]
+fail_under = 100
+
