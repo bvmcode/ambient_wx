@@ -34,8 +34,8 @@ jobs:
         run: |
             poetry run pytest ./src/ambient_wx -v
       - name: Imports
-        run: |
-            poetry run isort ./src/ambient_wx -c --diff
+        run: poetry run isort ./src/ambient_wx -c --diff
       - name: Linting
-        run: |
-            poetry run pflake8 ./src/ambient_wx
+        run: poetry run pflake8 ./src/ambient_wx
+      - name: Coverage
+        run: poetry run coverage run -m pytest && poetry run coverage report -m --fail-under=80

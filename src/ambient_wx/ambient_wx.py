@@ -129,10 +129,10 @@ class WxDeviceCollection(ApiRequestHandler):
             mac_addr = data["macAddress"]
             last_data = data["lastData"]
             info = SimpleNamespace(**data["info"])
-            coords = SimpleNamespace(**info.coords)
-            lat_lon = SimpleNamespace(**coords.coords)
-            self.devices.append(
-                WxDevice(
+            if "coords" in data["info"]:
+                coords = SimpleNamespace(**info.coords)
+                lat_lon = SimpleNamespace(**coords.coords)
+                device = WxDevice(
                     mac_addr=mac_addr,
                     name=info.name,
                     location=coords.location,
@@ -142,7 +142,13 @@ class WxDeviceCollection(ApiRequestHandler):
                     lon=lat_lon.lon,
                     data=last_data,
                 )
-            )
+            else:
+                device = WxDevice(
+                    mac_addr=mac_addr,
+                    name=info.name,
+                    data=last_data,
+                )
+            self.devices.append(device)
 
     def get_devices(self):
         params = {}
@@ -162,9 +168,10 @@ class WxObservationCollection(ApiRequestHandler):
             self.device = device
         else:
             self.device = WxDevice(mac_addr)
+        self.data = None
 
     def __repr__(self):
-        return f"WxStationData(ambient_api={self.ambient_api}, device={self.device})"
+        return f"WxObservationCollection(ambient_api={self.ambient_api}, device={self.device})"
 
     def __parse_response_data(self):
         self.data = [WxObservation(**record) for record in self.raw_data]

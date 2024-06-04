@@ -7,7 +7,7 @@ from ambient_wx.api import ApiRequestHandler
 
 class TestApiRequestHandler:
 
-    def setup_method(self):
+    def setup_method(self, url):
         self.root_url = "https://examplefoo.com"
         self.endpoint = "bar"
         self.url = f"{self.root_url}/{self.endpoint}"

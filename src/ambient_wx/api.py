@@ -5,13 +5,10 @@ from requests.adapters import HTTPAdapter, Retry
 
 
 class TimeoutHTTPAdapter(HTTPAdapter):
-    default_timeout = 30
+    default_timeout = (1, 10)
 
     def __init__(self, *args, **kwargs):
         self.timeout = self.default_timeout
-        if "timeout" in kwargs:
-            self.timeout = kwargs["timeout"]
-            del kwargs["timeout"]
         super().__init__(*args, **kwargs)
 
     def send(self, request, **kwargs):
@@ -39,7 +36,8 @@ class ApiRequestHandler:
         if root_url.endswith("/"):
             root_url = root_url[:-1]
         self.root_url = root_url
-        self.retry_total = kwargs.get("retry_total", 5)
+        self.retry_total = kwargs.get("retry_total", 10)
+        self.timeout = kwargs.get("timeout")
 
     def __repr__(self):
         return f"ApiRequestHandler({self.root_url})"
