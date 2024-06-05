@@ -5,6 +5,27 @@ It also serves as a side-project for me. ☺️
 
 This is currently a work in progress to get it in a package and with the proper tests and CI.
 
+### Units
+
+Units are set for these fields using the [pint](https://pint.readthedocs.io/en/stable/) python library:
+* windspeedmph - mph
+* windgustmph - mph
+* maxdailygust - mph
+* tempf - degF
+* baromrelin - Hg
+* baromabsin - Hg
+* tempinf - degF
+* hourlyrainin - inches
+* dailyrainin - inches
+* monthlyrainin - inches
+* yearlyrainin - inches
+* feelsLike - degF
+* dewPoint - degF
+* winddir - degrees
+* winddir_avg10m - degrees
+* humidity - percent
+* humidityin - percent
+
 ### Setup the API object
 ```python
 from ambient_wx import AmbientApi

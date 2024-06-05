@@ -35,53 +35,38 @@ class WxObservation:
     ureg = UnitRegistry()
     Q_ = ureg.Quantity
 
-    def __init__(
-        self,
-        dateutc,
-        date,
-        winddir,
-        windspeedmph,
-        windgustmph,
-        maxdailygust,
-        winddir_avg10m,
-        tempf,
-        humidity,
-        baromrelin,
-        baromabsin,
-        tempinf,
-        humidityin,
-        hourlyrainin,
-        dailyrainin,
-        monthlyrainin,
-        yearlyrainin,
-        feelsLike,
-        dewPoint,
-        **kwargs,
-    ):
+    def __init__(self, dateutc, date, **kwargs):
         self.dateutc = dateutc
         self.date = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
-        self.windspeedmph = self.Q_(windspeedmph, self.ureg.mph)
-        self.windgustmph = self.Q_(windgustmph, self.ureg.mph)
-        self.maxdailygust = self.Q_(maxdailygust, self.ureg.mph)
-        self.tempf = self.Q_(tempf, self.ureg.degF)
-        self.baromrelin = self.Q_(baromrelin, self.ureg.Hg)
-        self.baromabsin = self.Q_(baromabsin, self.ureg.Hg)
-        self.tempinf = self.Q_(tempinf, self.ureg.degF)
-        self.hourlyrainin = self.Q_(hourlyrainin, self.ureg.inches)
-        self.dailyrainin = self.Q_(dailyrainin, self.ureg.inches)
-        self.monthlyrainin = self.Q_(monthlyrainin, self.ureg.inches)
-        self.yearlyrainin = self.Q_(yearlyrainin, self.ureg.inches)
-        self.feelsLike = self.Q_(feelsLike, self.ureg.degF)
-        self.dewPoint = self.Q_(dewPoint, self.ureg.degF)
-        self.winddir = self.Q_(winddir, self.ureg.degrees)
-        self.winddir_avg10m = self.Q_(winddir_avg10m, self.ureg.degrees)
-        self.humidity = self.Q_(humidity, self.ureg.percent)
-        self.humidityin = self.Q_(humidityin, self.ureg.percent)
+        self.windspeedmph = self.__set_units(kwargs.pop("windspeedmph", None), self.ureg.mph)
+        self.windgustmph = self.__set_units(kwargs.pop("windgustmph", None), self.ureg.mph)
+        self.maxdailygust = self.__set_units(kwargs.pop("maxdailygust", None), self.ureg.mph)
+        self.tempf = self.__set_units(kwargs.pop("tempf", None), self.ureg.degF)
+        self.baromrelin = self.__set_units(kwargs.pop("baromrelin", None), self.ureg.Hg)
+        self.baromabsin = self.__set_units(kwargs.pop("baromabsin", None), self.ureg.Hg)
+        self.tempinf = self.__set_units(kwargs.pop("tempinf", None), self.ureg.degF)
+        self.hourlyrainin = self.__set_units(kwargs.pop("hourlyrainin", None), self.ureg.inches)
+        self.dailyrainin = self.__set_units(kwargs.pop("dailyrainin", None), self.ureg.inches)
+        self.monthlyrainin = self.__set_units(kwargs.pop("monthlyrainin", None), self.ureg.inches)
+        self.yearlyrainin = self.__set_units(kwargs.pop("yearlyrainin", None), self.ureg.inches)
+        self.feelsLike = self.__set_units(kwargs.pop("feelsLike", None), self.ureg.degF)
+        self.dewPoint = self.__set_units(kwargs.pop("dewPoint", None), self.ureg.degF)
+        self.winddir = self.__set_units(kwargs.pop("winddir", None), self.ureg.degrees)
+        self.winddir_avg10m = self.__set_units(
+            kwargs.pop("winddir_avg10m", None), self.ureg.degrees
+        )
+        self.humidity = self.__set_units(kwargs.pop("humidity", None), self.ureg.percent)
+        self.humidityin = self.__set_units(kwargs.pop("humidityin", None), self.ureg.percent)
         for attr in kwargs.keys():
             self.__dict__[attr] = kwargs[attr]
 
+    def __set_units(self, value, unit):
+        if value:
+            return self.Q_(value, unit)
+        return None
+
     def __repr__(self):
-        return f"WxObservation(date={self.date})"
+        return f"WxObservation(dateutc={self.dateutc}, date={self.date})"
 
     def set_units(self, field, units):
         self.__dict__[field] = self.Q_(self.__dict__[field], units)
