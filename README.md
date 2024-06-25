@@ -5,6 +5,12 @@ It also serves as a side-project for me. ☺️
 
 This is currently a work in progress to get it in a package and with the proper tests and CI.
 
+### Install
+
+python 3.8 or greater is required
+
+`pip install ambient_wx`
+
 ### Units
 
 Units are set for these fields using the [pint](https://pint.readthedocs.io/en/stable/) python library:
