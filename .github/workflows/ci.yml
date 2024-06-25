@@ -30,10 +30,6 @@ jobs:
         run: |
             poetry lock --no-update
             poetry install --no-interaction --no-root
-      # - name: Install project
-      #   run: |
-      #       poetry lock --no-update
-      #       poetry install --no-interaction
       - name: Tests
         run: |
             poetry run pytest ./src/ambient_wx -v
