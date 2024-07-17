@@ -7,7 +7,7 @@ This is currently a work in progress to get it in a package and with the proper 
 
 ### Install
 
-python 3.8 or greater is required
+python 3.9 or greater is required
 
 `pip install ambient_wx`
 
